@@ -2,6 +2,7 @@ import threading
 import tkinter as tk
 import wave
 import os
+from functions import transcribe
 
 import pyaudio
 
@@ -132,7 +133,9 @@ class AudioPlayer:
         self.is_recording = False
 
     def infer_audio(self):
-        pass
+        file_name = self.input_box.get() + ".wav"
+        file_path = os.path.join(self.records_dir, file_name)
+        transcribe(file_path)
 
     def exit(self):
         self.audio.terminate()
