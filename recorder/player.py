@@ -5,7 +5,6 @@ import os
 
 import pyaudio
 
-RECORDS_DIR = "../records"
 
 class AudioPlayer:
     # Define constants for audio recording
@@ -14,8 +13,12 @@ class AudioPlayer:
     CHANNELS = 1
     RATE = 44100
 
-    def __init__(self, master: tk.Tk):
+    def __init__(self, records_dir: str = "records"):
+        self.records_dir = records_dir
+        # Initialize the player
+        master = tk.Tk()
         master.title("Audio Player")
+        master.geometry("400x200")
 
         # Initialize the audio player
         self.is_recording = False
@@ -68,7 +71,7 @@ class AudioPlayer:
         self.is_playing = True
         # Get the file name
         file_name = self.input_box.get() + ".wav"
-        file_path = os.path.join(RECORDS_DIR, file_name)
+        file_path = os.path.join(self.records_dir, file_name)
 
         # Play the audio file
         wave_file = wave.open(file_path, "rb")
@@ -114,7 +117,7 @@ class AudioPlayer:
 
         # Save the audio data as a WAV file
         file_name = self.input_box.get() + ".wav"
-        file_path = os.path.join(RECORDS_DIR, file_name)
+        file_path = os.path.join(self.records_dir, file_name)
         wave_file = wave.open(file_path, 'wb')
         wave_file.setnchannels(self.CHANNELS)
         wave_file.setsampwidth(self.audio.get_sample_size(self.FORMAT))
@@ -135,8 +138,5 @@ class AudioPlayer:
         self.audio.terminate()
         self.master.destroy()
 
-
-root = tk.Tk()
-root.geometry("400x200")
-my_audio_player = AudioPlayer(root)
-root.mainloop()
+    def start(self):
+        self.master.mainloop()
