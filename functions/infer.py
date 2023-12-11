@@ -1,10 +1,19 @@
 import whisper
 from openai import OpenAI
+import timeit
 
 def transcribe(audio_path):
-    model = whisper.load_model("base")
+    model = whisper.load_model("base.en")
     result = model.transcribe(audio_path)
     print(result["text"])
+
+def transcribe_timeit(audio_path):
+    model = whisper.load_model("base.en")
+
+    code_to_measure = """result = model.transcribe(audio_path)"""
+
+    execution_time = timeit.timeit(stmt=code_to_measure, globals=globals(), number=10)
+    print(execution_time)
 
 
 def transcribe_api(audio_path):
@@ -22,7 +31,6 @@ def transcribe_api(audio_path):
 
 
 def transcribe_api_timeit(audio_path):
-    import timeit
 
     client = OpenAI()
     audio_file = open(audio_path, "rb")
