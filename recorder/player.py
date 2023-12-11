@@ -16,6 +16,10 @@ class AudioPlayer:
 
     def __init__(self, records_dir: str = "records"):
         self.records_dir = records_dir
+        if not os.path.exists(self.records_dir):
+            # Create the folder
+            os.makedirs(self.records_dir)
+
         # Initialize the player
         master = tk.Tk()
         master.title("Audio Player")
