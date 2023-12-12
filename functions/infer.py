@@ -2,18 +2,21 @@ import whisper
 from openai import OpenAI
 import timeit
 
-def transcribe(audio_path):
-    model = whisper.load_model("base.en")
+def transcribe(audio_path, model_name="base.en"):
+    model = whisper.load_model(model_name)
     result = model.transcribe(audio_path)
-    print(result["text"])
+    return result["text"]
 
-def transcribe_timeit(audio_path):
-    model = whisper.load_model("base.en")
+def transcribe_timeit(audio_path, model_name="base.en"):
 
-    code_to_measure = """result = model.transcribe(audio_path)"""
+    model = whisper.load_model(model_name)
 
-    execution_time = timeit.timeit(stmt=code_to_measure, globals=globals(), number=10)
-    print(execution_time)
+    def transcribe_code():
+        _ = model.transcribe(audio_path)
+
+    n = 10
+    execution_time = timeit.timeit(stmt=transcribe_code, number=n) / n
+    return execution_time
 
 
 def transcribe_api(audio_path):
@@ -30,17 +33,18 @@ def transcribe_api(audio_path):
     print(result.text)
 
 
-def transcribe_api_timeit(audio_path):
+def transcribe_api_timeit(audio_path, model_name="base.en"):
 
+    setup_code = """
     client = OpenAI()
     audio_file = open(audio_path, "rb")
-
-    code_to_measure = """
+    """
+    code = """
 result = client.audio.transcriptions.create(
     model="whisper-1",
     file=audio_file
     )
 """
-
-    execution_time = timeit.timeit(stmt=code_to_measure, globals=globals(), number=10)
-    print(execution_time)
+    n = 10
+    execution_time = timeit.timeit(stmt=code, globals=globals(), setup=setup_code, number=n) / n
+    return execution_time

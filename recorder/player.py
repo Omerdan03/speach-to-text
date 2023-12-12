@@ -140,7 +140,11 @@ class AudioPlayer:
         file_name = self.input_box.get() + ".wav"
         file_path = os.path.join(os.getcwd(), self.records_dir, file_name)
         # transcribe(file_path)
-        transcribe_timeit(file_path)
+        for model_name in ['tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v2']:
+            print(f"Model: {model_name}")
+            time = transcribe_timeit(file_path, model_name=model_name)
+            print(f"Time: {time}")
+            print(f"text = {transcribe(file_path, model_name=model_name)}")
         # transcribe_api(file_path)
         # transcribe_api_timeit(file_path)
 
