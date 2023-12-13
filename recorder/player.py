@@ -2,7 +2,7 @@ import threading
 import tkinter as tk
 import wave
 import os
-from functions import transcribe, transcribe_timeit, transcribe_api, transcribe_api_timeit
+import speachToText as s2t
 
 import pyaudio
 
@@ -14,7 +14,8 @@ class AudioPlayer:
     CHANNELS = 1
     RATE = 44100
 
-    def __init__(self, records_dir: str = "records"):
+    def __init__(self, engine: str = "whisper", records_dir: str = "records"):
+        self.engine = engine
         self.records_dir = records_dir
         if not os.path.exists(self.records_dir):
             # Create the folder
@@ -139,14 +140,16 @@ class AudioPlayer:
     def infer_audio(self):
         file_name = self.input_box.get() + ".wav"
         file_path = os.path.join(os.getcwd(), self.records_dir, file_name)
-        # transcribe(file_path)
-        for model_name in ['tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v2']:
-            print(f"Model: {model_name}")
-            time = transcribe_timeit(file_path, model_name=model_name)
+        if self.engine == "whisper":
+            s2t.whisperImp.transcribe(file_path)
+            for model_name in ['tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v2']:
+                print(f"Model: {model_name}")
+                time = s2t.whisperImp.transcribe_timeit(file_path, model_name=model_name)
+                print(f"Time: {time}")
+                print(f"text = {s2t.whisperImp.transcribe(file_path, model_name=model_name)}")
+            time = s2t.whisperImp.transcribe_api_timeit(file_path)
             print(f"Time: {time}")
-            print(f"text = {transcribe(file_path, model_name=model_name)}")
-        # transcribe_api(file_path)
-        # transcribe_api_timeit(file_path)
+            print(f"text = {s2t.whisperImp.transcribe_api(file_path)}")
 
     def exit(self):
         self.audio.terminate()
