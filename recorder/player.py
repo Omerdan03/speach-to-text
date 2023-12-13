@@ -2,7 +2,7 @@ import threading
 import tkinter as tk
 import wave
 import os
-import speachToTextEngines as s2t
+import speechToTextEngines as s2t
 
 import pyaudio
 
