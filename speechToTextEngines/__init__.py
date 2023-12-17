@@ -1,1 +1,1 @@
-from . import whisperImp, deepSpeechImp
+from . import whisperImp, speechRecognitionImp

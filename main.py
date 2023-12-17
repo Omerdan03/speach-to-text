@@ -2,7 +2,7 @@ from recorder import AudioPlayer
 
 
 def main():
-    my_audio_player = AudioPlayer(engine="whisper")
+    my_audio_player = AudioPlayer(engine="speechRecognition")
     my_audio_player.start()
 
 

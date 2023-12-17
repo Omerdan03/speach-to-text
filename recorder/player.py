@@ -141,7 +141,6 @@ class AudioPlayer:
         file_name = self.input_box.get() + ".wav"
         file_path = os.path.join(os.getcwd(), self.records_dir, file_name)
         if self.engine == "whisper":
-            s2t.whisperImp.transcribe(file_path)
             for model_name in ['tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v2']:
                 print(f"Model: {model_name}")
                 time = s2t.whisperImp.transcribe_timeit(file_path, model_name=model_name)
@@ -150,6 +149,10 @@ class AudioPlayer:
             time = s2t.whisperImp.transcribe_api_timeit(file_path)
             print(f"Time: {time}")
             print(f"text = {s2t.whisperImp.transcribe_api(file_path)}")
+        elif self.engine == "speechRecognition":
+            # time = s2t.speechRecognitionImp.transcribe_timeit(file_path)
+            # print(f"Time: {time}")
+            print(f"text = {s2t.speechRecognitionImp.transcribe(file_path)}")
 
     def exit(self):
         self.audio.terminate()
